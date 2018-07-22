@@ -13,30 +13,25 @@ var PayolaCheckout = {
         var form = button.parent('form');
         var options = form.data();
 
-        if (options.stripe_customer_id) {
-          // If an existing Stripe customer id is specified, don't open the Stripe Checkout - just AJAX submit the form
-          PayolaCheckout.submitForm(form.attr('action'), { stripe_customer_id: options.stripe_customer_id }, options);
-        } else {
-          // Open a Stripe Checkout to collect the customer's billing details
-          var handler = StripeCheckout.configure({
-              key: options.publishable_key,
-              image: options.product_image_path,
-              token: function(token) { PayolaCheckout.tokenHandler(token, options); },
-              name: options.name,
-              description: options.description,
-              amount: options.price,
-              panelLabel: options.panel_label,
-              allowRememberMe: options.allow_remember_me,
-              zipCode: options.verify_zip_code,
-              billingAddress: options.billing_address,
-              shippingAddress: options.shipping_address,
-              currency: options.currency,
-              bitcoin: options.bitcoin,
-              email: options.email || undefined
-          });
+        // Open a Stripe Checkout to collect the customer's billing details
+        var handler = StripeCheckout.configure({
+            key: options.publishable_key,
+            image: options.product_image_path,
+            token: function(token) { PayolaCheckout.tokenHandler(token, options); },
+            name: options.name,
+            description: options.description,
+            amount: options.price,
+            panelLabel: options.panel_label,
+            allowRememberMe: options.allow_remember_me,
+            zipCode: options.verify_zip_code,
+            billingAddress: options.billing_address,
+            shippingAddress: options.shipping_address,
+            currency: options.currency,
+            bitcoin: options.bitcoin,
+            email: options.email || undefined
+        });
 
-          handler.open();
-        }
+        handler.open();
     },
 
     tokenHandler: function(token, options) {
